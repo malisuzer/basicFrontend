@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Q-Farm | Modern Hayvancılık Çözümleri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header>
+      <nav>
+        <div class="logo">Q-Farm</div>
+        <!-- CSS Hamburger Menu Hack -->
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+        <label for="nav-toggle" class="nav-toggle-label">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+
+        <ul class="nav-links">
+          <li><a href="#">Anasayfa</a></li>
+          <li><a href="#">Hakkımızda</a></li>
+          <li><a href="#">Hizmetler</a></li>
+          <li><a href="team.html">Ekibimiz</a></li>
+          <li><a href="#">İletişim</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Bölümü -->
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Geleceğin Çiftliği, Bugünden</h1>
+        <p>
+          Q-Farm ile hayvancılıkta verimliliği artırın. Akıllı ahır sistemleri
+          ve otomatik sağım teknolojileri ile tanışın.
+        </p>
+        <a href="#" class="btn">Keşfet</a>
+      </div>
+      <div class="hero-img">
+        <!-- Temsili Görsel -->
+        <img
+          src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+          alt="Modern Çiftlik"
+        />
+      </div>
+    </section>
+
+    <!-- Hizmetler -->
+    <section class="services">
+      <h2 class="section-title">Hizmetlerimiz</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🥛</div>
+          <h3>Otomatik Sağım</h3>
+          <p>El değmeden hijyenik süt sağım sistemleri.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🌾</div>
+          <h3>Akıllı Yemleme</h3>
+          <p>Hayvanlarınız için optimize edilmiş yem dağıtımı.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📊</div>
+          <h3>Sürü Takip</h3>
+          <p>Dijital küpeler ile 7/24 sağlık izleme.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Maliyet Hesaplama Aracı (Task 4.1) -->
+    <section class="calculator-section" id="calculator">
+      <h2 class="section-title">Maliyet Hesaplama Aracı</h2>
+      <div class="calculator-container">
+        <div class="calc-form">
+          <div class="form-group">
+            <label for="animal-count">Büyükbaş Hayvan Sayısı</label>
+            <input
+              type="number"
+              id="animal-count"
+              min="0"
+              placeholder="Örn: 50"
+              oninput="calculateTotal()"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Ek Hizmetler</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  id="service-milking"
+                  value="25000"
+                  onchange="calculateTotal()"
+                />
+                <span class="custom-checkbox"></span>
+                Otomatik Sağım Sistemi (+25.000 TL)
+              </label>
+
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  id="service-feeding"
+                  value="15000"
+                  onchange="calculateTotal()"
+                />
+                <span class="custom-checkbox"></span>
+                Akıllı Yemleme Sistemi (+15.000 TL)
+              </label>
+
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  id="service-tracking"
+                  value="500"
+                  onchange="calculateTotal()"
+                />
+                <span class="custom-checkbox"></span>
+                Sürü Takip Sistemi (Hayvan Başı +500 TL)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-result">
+          <h3>Tahmini Yatırım Maliyeti</h3>
+          <div id="total-price" class="price-display">0 ₺</div>
+          <p class="note">
+            *Fiyatlar tahmini olup, detaylı teklif için iletişime geçiniz.
+          </p>
+          <button class="btn btn-calc" onclick="calculateTotal()">
+            Hemen Teklif Al
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 Q-Farm Teknoloji A.Ş.</p>
+      <p style="margin-top: 10px">
+        <a href="task2.html" class="footer-link"
+          >Paket Fiyatlarını Gör (Task 2.2)</a
+        >
+      </p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
