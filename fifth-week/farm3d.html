@@ -1,0 +1,1243 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Çiftlik | Q-Farm</title>
+    <meta name="description" content="Q-Farm 3D çiftlik görüntüleyici. Etkileşimli low-poly hayvan sahnesi." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+        /* ── Page Layout ── */
+        .farm3d-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+        }
+
+        .scene-wrapper {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem 1.5rem;
+            gap: 1.5rem;
+        }
+
+        /* ── Canvas Container ── */
+        #canvas-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 40%, #172541 100%);
+            box-shadow: var(--shadow-lg);
+            min-height: 500px;
+        }
+
+        #canvas-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .canvas-hint {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.75rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* ── Side Panel ── */
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .panel-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .panel-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Animal Selector */
+        .animal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .animal-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 0.6rem 0.3rem;
+            background: var(--bg-2);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: inherit;
+        }
+
+        .animal-btn span:first-child {
+            font-size: 1.6rem;
+        }
+
+        .animal-btn:hover,
+        .animal-btn.active {
+            border-color: var(--accent);
+            background: rgba(246, 173, 58, 0.08);
+            color: var(--text);
+        }
+
+        /* Color Palette */
+        .color-swatches {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .swatch:hover {
+            transform: scale(1.2);
+        }
+
+        .swatch.active {
+            border-color: var(--accent);
+            transform: scale(1.15);
+        }
+
+        /* Controls */
+        .ctrl-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+        }
+
+        .ctrl-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .ctrl-value {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            min-width: 36px;
+            text-align: right;
+        }
+
+        input[type="range"].ctrl-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            outline: none;
+            cursor: pointer;
+            margin-top: 0.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        input[type="range"].ctrl-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 6px var(--accent-glow);
+        }
+
+        /* Stats */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-row span:first-child {
+            color: var(--text-muted);
+        }
+
+        .stat-row span:last-child {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* Environment Buttons */
+        .env-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .env-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: var(--bg-2);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: inherit;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .env-btn:hover,
+        .env-btn.active {
+            border-color: var(--primary);
+            color: var(--text);
+            background: rgba(30, 80, 160, 0.1);
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            min-width: 90px;
+            padding: 0.5rem 0.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        /* Loading overlay */
+        #loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(13, 27, 42, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 20px;
+            gap: 1rem;
+            color: #fff;
+        }
+
+        #loading-overlay .spin {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.15);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 860px) {
+            .scene-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            #canvas-container {
+                min-height: 360px;
+            }
+
+            .side-panel {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .panel-card {
+                flex: 1;
+                min-width: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body class="farm3d-page">
+
+    <!-- ═══ HEADER ═══ -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Q-<span>Farm</span></a>
+
+            <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Menüyü aç">
+                <span></span><span></span><span></span>
+            </label>
+
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Anasayfa</a></li>
+                    <li><a href="index.html#services">Hizmetler</a></li>
+                    <li><a href="team.html">Ekibimiz</a></li>
+                    <li><a href="weather.html">Hava Durumu 🌤️</a></li>
+                    <li><a href="farm3d.html" class="active">3D Çiftlik 🐄</a></li>
+                </ul>
+
+                <label class="bb8-toggle" title="Temayı değiştir" aria-label="Tema değiştir">
+                    <input class="bb8-toggle__checkbox" type="checkbox" id="theme-toggle"
+                        onchange="toggleTheme(this.checked)">
+                    <div class="bb8-toggle__container">
+                        <div class="bb8-toggle__scenery">
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="tatto-1"></div>
+                            <div class="tatto-2"></div>
+                            <div class="gomrassen"></div>
+                            <div class="hermes"></div>
+                            <div class="chenini"></div>
+                            <div class="bb8-toggle__cloud"></div>
+                            <div class="bb8-toggle__cloud"></div>
+                            <div class="bb8-toggle__cloud"></div>
+                        </div>
+                        <div class="bb8">
+                            <div class="bb8__head-container">
+                                <div class="bb8__antenna"></div>
+                                <div class="bb8__antenna"></div>
+                                <div class="bb8__head"></div>
+                            </div>
+                            <div class="bb8__body"></div>
+                        </div>
+                        <div class="artificial__hidden">
+                            <div class="bb8__shadow"></div>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ═══ MAIN ═══ -->
+    <main class="scene-wrapper">
+
+        <!-- 3D Canvas -->
+        <div style="display:contents; grid-column: 2;"><!-- layout spacer --></div>
+        <div id="canvas-container">
+            <!-- Loading -->
+            <div id="loading-overlay">
+                <div class="spin"></div>
+                <span style="font-size:0.9rem; opacity:0.7;">Sahne yükleniyor…</span>
+            </div>
+            <span class="canvas-hint">🖱️ Fareyle döndür · 🖱️ Scroll: zoom · Sağ tık: kaydır</span>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+
+            <!-- Animal selector -->
+            <div class="panel-card">
+                <h3>🐄 Hayvan Seç</h3>
+                <div class="animal-grid">
+                    <button class="animal-btn active" onclick="App.changeAnimal('cow', this)">
+                        <span>🐄</span><span>İnek</span>
+                    </button>
+                    <button class="animal-btn" onclick="App.changeAnimal('pig', this)">
+                        <span>🐷</span><span>Domuz</span>
+                    </button>
+                    <button class="animal-btn" onclick="App.changeAnimal('sheep', this)">
+                        <span>🐑</span><span>Koyun</span>
+                    </button>
+                    <button class="animal-btn" onclick="App.changeAnimal('horse', this)">
+                        <span>🐴</span><span>At</span>
+                    </button>
+                    <button class="animal-btn" onclick="App.changeAnimal('chicken', this)">
+                        <span>🐔</span><span>Tavuk</span>
+                    </button>
+                    <button class="animal-btn" onclick="App.changeAnimal('goat', this)">
+                        <span>🐐</span><span>Keçi</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Color -->
+            <div class="panel-card">
+                <h3>🎨 Renk Teması</h3>
+                <div class="color-swatches" id="color-swatches">
+                    <div class="swatch active" data-color="#f5f5f0" style="background:#f5f5f0; border: 1px solid #ccc;"
+                        onclick="App.setBodyColor('#f5f5f0', this)"></div>
+                    <div class="swatch" data-color="#8b6914" style="background:#8b6914;"
+                        onclick="App.setBodyColor('#8b6914', this)"></div>
+                    <div class="swatch" data-color="#c8a882" style="background:#c8a882;"
+                        onclick="App.setBodyColor('#c8a882', this)"></div>
+                    <div class="swatch" data-color="#2d2d2d" style="background:#2d2d2d;"
+                        onclick="App.setBodyColor('#2d2d2d', this)"></div>
+                    <div class="swatch" data-color="#e07b54" style="background:#e07b54;"
+                        onclick="App.setBodyColor('#e07b54', this)"></div>
+                    <div class="swatch" data-color="#5c9e6e" style="background:#5c9e6e;"
+                        onclick="App.setBodyColor('#5c9e6e', this)"></div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="panel-card">
+                <h3>⚙️ Kontroller</h3>
+
+                <div class="ctrl-row">
+                    <span class="ctrl-label">Dönüş Hızı</span>
+                    <span class="ctrl-value" id="speed-val">1.0×</span>
+                </div>
+                <input type="range" class="ctrl-slider" min="0" max="30" value="10" step="1"
+                    oninput="App.setSpeed(this.value)">
+
+                <div class="ctrl-row">
+                    <span class="ctrl-label">Zemin Boyutu</span>
+                    <span class="ctrl-value" id="ground-val">1.0×</span>
+                </div>
+                <input type="range" class="ctrl-slider" min="5" max="30" value="15" step="1"
+                    oninput="App.setGroundSize(this.value)">
+
+                <div class="ctrl-row">
+                    <span class="ctrl-label">Işık Yoğunluğu</span>
+                    <span class="ctrl-value" id="light-val">1.0×</span>
+                </div>
+                <input type="range" class="ctrl-slider" min="0" max="30" value="15" step="1"
+                    oninput="App.setLight(this.value)">
+            </div>
+
+            <!-- Environment -->
+            <div class="panel-card">
+                <h3>🌿 Ortam</h3>
+                <div class="env-btns" style="margin-bottom:0.6rem;">
+                    <button class="env-btn active" onclick="App.setEnv('day',this)">☀️ Gündüz</button>
+                    <button class="env-btn" onclick="App.setEnv('sunset',this)">🌅 Akşam</button>
+                    <button class="env-btn" onclick="App.setEnv('night',this)">🌙 Gece</button>
+                </div>
+                <div class="env-btns">
+                    <button class="env-btn active" onclick="App.toggleGrass(this)">🌾 Çimen</button>
+                    <button class="env-btn" onclick="App.toggleShadow(this)">💡 Gölge</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="panel-card">
+                <h3>📊 Sahne Bilgisi</h3>
+                <div class="stat-row"><span>Geometri</span><span id="stat-geo">—</span></div>
+                <div class="stat-row"><span>Üçgen</span><span id="stat-tri">—</span></div>
+                <div class="stat-row"><span>FPS</span><span id="stat-fps">—</span></div>
+                <div class="stat-row"><span>Motor</span><span>Three.js r162</span></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="panel-card">
+                <h3>🎬 Animasyon</h3>
+                <div class="action-btns">
+                    <button class="action-btn" onclick="App.playAnim('idle')">😴 Bekle</button>
+                    <button class="action-btn" onclick="App.playAnim('walk')">🚶 Yürü</button>
+                    <button class="action-btn" onclick="App.playAnim('eat')">🌿 Ye</button>
+                    <button class="action-btn secondary" onclick="App.resetCamera()">📷 Sıfırla</button>
+                </div>
+            </div>
+
+        </div><!-- /side-panel -->
+    </main>
+
+    <!-- Footer -->
+    <footer
+        style="text-align:center; background:var(--primary); color:rgba(255,255,255,0.6); padding:1.2rem; font-size:0.85rem; margin-top:auto;">
+        <p>© 2026 Q-Farm · 3D Motor: <a href="https://threejs.org" target="_blank" rel="noopener"
+                style="color:var(--accent);">Three.js</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <!-- Three.js CDN + OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        // =============================================================
+        // Q-FARM 3D SCENE — Low-Poly Farm Animals with Three.js
+        // =============================================================
+
+        const App = (() => {
+            // ── State ──────────────────────────────────────────────────
+            let scene, camera, renderer, controls, clock;
+            let animalGroup = null;
+            let groundMesh = null;
+            let grassMeshes = [];
+            let animalType = 'cow';
+            let bodyColor = '#f5f5f0';
+            let rotSpeed = 0.01;
+            let dirLight;
+            let shadowEnabled = true;
+            let grassEnabled = true;
+            let currentEnv = 'day';
+            let animMode = 'idle';
+            let headBone = null;
+            let legBones = [];
+            let animT = 0;
+            let fpsCounter = 0, fpsClock = 0, lastFPS = 60;
+
+            // Env presets
+            const ENVS = {
+                day: { bg: 0x87ceeb, fog: 0xbde0f5, ambient: 0x6699aa, sun: 0xfff5dc, intensity: 1.2 },
+                sunset: { bg: 0xf4845f, fog: 0xf4a580, ambient: 0x774433, sun: 0xff9944, intensity: 0.9 },
+                night: { bg: 0x040d1a, fog: 0x070e2b, ambient: 0x111833, sun: 0x334466, intensity: 0.4 },
+            };
+
+            // ── Init ───────────────────────────────────────────────────
+            function init() {
+                const container = document.getElementById('canvas-container');
+
+                // Scene
+                scene = new THREE.Scene();
+                scene.fog = new THREE.FogExp2(0xbde0f5, 0.025);
+
+                // Camera
+                camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 200);
+                camera.position.set(0, 4, 9);
+
+                // Renderer
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                renderer.toneMappingExposure = 1.1;
+                container.appendChild(renderer.domElement);
+
+                // Orbit Controls
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.08;
+                controls.minDistance = 3;
+                controls.maxDistance = 25;
+                controls.maxPolarAngle = Math.PI / 2 - 0.05;
+                controls.target.set(0, 1.5, 0);
+
+                // Clock
+                clock = new THREE.Clock();
+
+                // Lighting
+                setupLighting();
+
+                // Ground
+                buildGround();
+
+                // Grass
+                buildGrass();
+
+                // Animal
+                buildAnimal('cow');
+
+                // Env
+                applyEnv('day');
+
+                // Resize
+                window.addEventListener('resize', onResize);
+
+                // Remove loading overlay
+                setTimeout(() => {
+                    const lo = document.getElementById('loading-overlay');
+                    if (lo) lo.style.display = 'none';
+                    updateStats();
+                }, 600);
+
+                // Start loop
+                animate();
+            }
+
+            // ── Lighting ───────────────────────────────────────────────
+            function setupLighting() {
+                const ambient = new THREE.AmbientLight(0x6699aa, 0.6);
+                ambient.name = 'ambientLight';
+                scene.add(ambient);
+
+                dirLight = new THREE.DirectionalLight(0xfff5dc, 1.2);
+                dirLight.position.set(8, 12, 8);
+                dirLight.castShadow = true;
+                dirLight.shadow.mapSize.set(2048, 2048);
+                dirLight.shadow.camera.near = 0.5;
+                dirLight.shadow.camera.far = 60;
+                dirLight.shadow.camera.left = -15;
+                dirLight.shadow.camera.right = 15;
+                dirLight.shadow.camera.top = 15;
+                dirLight.shadow.camera.bottom = -15;
+                dirLight.shadow.bias = -0.001;
+                scene.add(dirLight);
+
+                // Rim light
+                const rim = new THREE.DirectionalLight(0x4466ff, 0.3);
+                rim.position.set(-5, 3, -5);
+                scene.add(rim);
+            }
+
+            // ── Ground ─────────────────────────────────────────────────
+            function buildGround() {
+                const geo = new THREE.CircleGeometry(15, 64);
+                const mat = new THREE.MeshLambertMaterial({ color: 0x5a8a3c });
+                groundMesh = new THREE.Mesh(geo, mat);
+                groundMesh.rotation.x = -Math.PI / 2;
+                groundMesh.receiveShadow = true;
+                scene.add(groundMesh);
+
+                // Dirt ring under animal
+                const dirtGeo = new THREE.CircleGeometry(2.5, 32);
+                const dirtMat = new THREE.MeshLambertMaterial({ color: 0x9b7343 });
+                const dirt = new THREE.Mesh(dirtGeo, dirtMat);
+                dirt.rotation.x = -Math.PI / 2;
+                dirt.position.y = 0.01;
+                scene.add(dirt);
+            }
+
+            // ── Grass tufts ────────────────────────────────────────────
+            function buildGrass() {
+                const mat = new THREE.MeshLambertMaterial({ color: 0x3d7a2a, side: THREE.DoubleSide });
+                for (let i = 0; i < 120; i++) {
+                    const r = 3 + Math.random() * 11;
+                    const angle = Math.random() * Math.PI * 2;
+                    const geo = new THREE.ConeGeometry(0.06 + Math.random() * 0.06, 0.35 + Math.random() * 0.3, 4);
+                    const mesh = new THREE.Mesh(geo, mat);
+                    mesh.position.set(Math.cos(angle) * r, 0.15, Math.sin(angle) * r);
+                    mesh.rotation.z = (Math.random() - 0.5) * 0.4;
+                    mesh.rotation.x = (Math.random() - 0.5) * 0.2;
+                    mesh.castShadow = false;
+                    scene.add(mesh);
+                    grassMeshes.push(mesh);
+                }
+            }
+
+            // ── Box helper ─────────────────────────────────────────────
+            function box(w, h, d, color, x, y, z, rx = 0, ry = 0, rz = 0) {
+                const geo = new THREE.BoxGeometry(w, h, d);
+                const mat = new THREE.MeshLambertMaterial({ color });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(x, y, z);
+                mesh.rotation.set(rx, ry, rz);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                return mesh;
+            }
+
+            // ── Sphere helper ──────────────────────────────────────────
+            function sphere(r, color, x, y, z) {
+                const geo = new THREE.SphereGeometry(r, 8, 8);
+                const mat = new THREE.MeshLambertMaterial({ color });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(x, y, z);
+                mesh.castShadow = true;
+                return mesh;
+            }
+
+            // ── Cylinder helper ────────────────────────────────────────
+            function cyl(rt, rb, h, color, x, y, z, rx = 0) {
+                const geo = new THREE.CylinderGeometry(rt, rb, h, 8);
+                const mat = new THREE.MeshLambertMaterial({ color });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(x, y, z);
+                mesh.rotation.x = rx;
+                mesh.castShadow = true;
+                return mesh;
+            }
+
+            // ═══════════════════════════════════════════════════════════
+            //  ANIMAL BUILDERS
+            // ═══════════════════════════════════════════════════════════
+
+            const BUILDERS = {
+
+                // ── COW ────────────────────────────────────────────────
+                cow(g, c) {
+                    const BC = parseInt(c.replace('#', ''), 16);
+                    const SPOT = 0x2a2a2a;
+                    const NOSE = 0xf4b8b0;
+                    const EYE = 0x111111;
+                    const HORN = 0xe8d5a0;
+                    const HOOF = 0x3a2e2e;
+
+                    // Body
+                    const body = box(2, 1.2, 3.2, BC, 0, 1.6, 0);
+                    g.add(body);
+
+                    // Spots
+                    const sp1 = box(0.6, 0.6, 0.8, SPOT, 0.6, 1.6, -0.4);
+                    const sp2 = box(0.5, 0.5, 0.7, SPOT, -0.5, 1.7, 0.6);
+                    g.add(sp1, sp2);
+
+                    // Neck
+                    const neck = box(0.7, 0.7, 0.9, BC, 0, 1.9, -1.5);
+                    neck.rotation.x = -0.3;
+                    g.add(neck);
+
+                    // Head group
+                    headBone = new THREE.Group();
+                    headBone.position.set(0, 2.4, -2.4);
+
+                    const head = box(1.0, 0.9, 1.2, BC, 0, 0, 0);
+                    headBone.add(head);
+
+                    // Snout
+                    const snout = box(0.7, 0.5, 0.5, NOSE, 0, -0.1, -0.6);
+                    headBone.add(snout);
+
+                    // Nostrils
+                    const n1 = box(0.1, 0.08, 0.08, 0x8b3030, -0.16, -0.08, -0.87);
+                    const n2 = box(0.1, 0.08, 0.08, 0x8b3030, 0.16, -0.08, -0.87);
+                    headBone.add(n1, n2);
+
+                    // Eyes
+                    const e1 = box(0.12, 0.12, 0.08, EYE, -0.42, 0.15, -0.52);
+                    const e2 = box(0.12, 0.12, 0.08, EYE, 0.42, 0.15, -0.52);
+                    headBone.add(e1, e2);
+
+                    // Ears
+                    const ea1 = box(0.35, 0.2, 0.08, BC, -0.65, 0.3, -0.1);
+                    ea1.rotation.z = 0.4;
+                    const ea2 = box(0.35, 0.2, 0.08, BC, 0.65, 0.3, -0.1);
+                    ea2.rotation.z = -0.4;
+                    headBone.add(ea1, ea2);
+
+                    // Horns
+                    const h1 = box(0.1, 0.4, 0.1, HORN, -0.4, 0.65, -0.1);
+                    h1.rotation.z = -0.4;
+                    const h2 = box(0.1, 0.4, 0.1, HORN, 0.4, 0.65, -0.1);
+                    h2.rotation.z = 0.4;
+                    headBone.add(h1, h2);
+
+                    g.add(headBone);
+
+                    // Udder
+                    const udder = box(0.7, 0.35, 0.6, NOSE, 0, 0.85, 0.5);
+                    g.add(udder);
+
+                    // Legs (FL, FR, BL, BR)
+                    legBones = [];
+                    [[-0.6, 0, -1.2], [0.6, 0, -1.2], [-0.6, 0, 0.9], [0.6, 0, 0.9]].forEach(([x, , z]) => {
+                        const leg = new THREE.Group();
+                        leg.position.set(x, 0, z);
+                        const upper = box(0.28, 0.7, 0.28, BC, 0, 1.1, 0);
+                        const lower = box(0.22, 0.7, 0.22, BC, 0, 0.35, 0);
+                        const hoof = box(0.26, 0.2, 0.3, HOOF, 0, -0.05, 0);
+                        leg.add(upper, lower, hoof);
+                        leg.castShadow = true;
+                        g.add(leg);
+                        legBones.push(leg);
+                    });
+
+                    // Tail
+                    const tail = box(0.1, 0.6, 0.1, BC, 0, 1.2, 1.7);
+                    tail.rotation.x = 0.5;
+                    const tailTip = sphere(0.14, SPOT, 0, 0.7, 1.95);
+                    g.add(tail, tailTip);
+                },
+
+                // ── PIG ────────────────────────────────────────────────
+                pig(g, c) {
+                    const BC = parseInt(c.replace('#', ''), 16);
+                    const PINK = 0xffb7c5;
+                    const EYE = 0x111111;
+
+                    const body = new THREE.Mesh(
+                        new THREE.SphereGeometry(1.1, 10, 10),
+                        new THREE.MeshLambertMaterial({ color: BC })
+                    );
+                    body.position.set(0, 1.5, 0);
+                    body.scale.set(1.4, 1, 1.7);
+                    body.castShadow = true;
+                    g.add(body);
+
+                    headBone = new THREE.Group();
+                    headBone.position.set(0, 2.0, -1.6);
+
+                    const head = sphere(0.72, BC, 0, 0, 0);
+                    headBone.add(head);
+
+                    // Snout
+                    const snout = cyl(0.3, 0.35, 0.25, PINK, 0, -0.1, -0.7);
+                    headBone.add(snout);
+                    const n1 = box(0.1, 0.05, 0.07, 0x8b3060, -0.1, -0.1, -0.84);
+                    const n2 = box(0.1, 0.05, 0.07, 0x8b3060, 0.1, -0.1, -0.84);
+                    headBone.add(n1, n2);
+
+                    const e1 = box(0.12, 0.12, 0.07, EYE, -0.35, 0.2, -0.62);
+                    const e2 = box(0.12, 0.12, 0.07, EYE, 0.35, 0.2, -0.62);
+                    headBone.add(e1, e2);
+
+                    // Ears
+                    const ea1 = box(0.25, 0.35, 0.05, PINK, -0.5, 0.55, 0.05);
+                    ea1.rotation.z = -0.4;
+                    const ea2 = box(0.25, 0.35, 0.05, PINK, 0.5, 0.55, 0.05);
+                    ea2.rotation.z = 0.4;
+                    headBone.add(ea1, ea2);
+
+                    g.add(headBone);
+
+                    legBones = [];
+                    [[-0.55, 0, -0.7], [0.55, 0, -0.7], [-0.55, 0, 0.75], [0.55, 0, 0.75]].forEach(([x, , z]) => {
+                        const leg = new THREE.Group();
+                        leg.position.set(x, 0, z);
+                        const upper = cyl(0.2, 0.22, 0.6, BC, 0, 0.9, 0);
+                        const lower = cyl(0.18, 0.2, 0.55, BC, 0, 0.3, 0);
+                        const hoof = cyl(0.23, 0.25, 0.18, 0x4a3030, 0, -0.05, 0);
+                        leg.add(upper, lower, hoof);
+                        g.add(leg);
+                        legBones.push(leg);
+                    });
+
+                    // Curly tail
+                    const tCurl = cyl(0.06, 0.06, 0.3, PINK, 0, 1.5, 1.15);
+                    tCurl.rotation.z = 0.8;
+                    g.add(tCurl);
+                },
+
+                // ── SHEEP ──────────────────────────────────────────────
+                sheep(g, c) {
+                    const BC = parseInt(c.replace('#', ''), 16);
+                    const FACE = 0x3a2e2e;
+                    const EYE = 0x111111;
+
+                    // Fluffy body (cluster of spheres)
+                    const fluff = [
+                        [0, 1.6, 0, 1.2], [0.6, 1.7, -0.3, 0.85], [-0.6, 1.7, -0.3, 0.85],
+                        [0.6, 1.7, 0.4, 0.85], [-0.6, 1.7, 0.4, 0.85], [0, 1.9, 0.6, 0.75], [0, 1.9, -0.6, 0.75],
+                    ];
+                    fluff.forEach(([x, y, z, r]) => {
+                        const s = sphere(r, BC, x, y, z);
+                        g.add(s);
+                    });
+
+                    headBone = new THREE.Group();
+                    headBone.position.set(0, 2.1, -1.8);
+
+                    const head = sphere(0.55, FACE, 0, 0, 0);
+                    headBone.add(head);
+
+                    const e1 = box(0.1, 0.1, 0.06, EYE, -0.22, 0.1, -0.48);
+                    const e2 = box(0.1, 0.1, 0.06, EYE, 0.22, 0.1, -0.48);
+                    headBone.add(e1, e2);
+
+                    // Ears
+                    const ea1 = box(0.1, 0.28, 0.06, FACE, -0.5, 0.05, 0);
+                    ea1.rotation.z = 0.5;
+                    const ea2 = box(0.1, 0.28, 0.06, FACE, 0.5, 0.05, 0);
+                    ea2.rotation.z = -0.5;
+                    headBone.add(ea1, ea2);
+
+                    g.add(headBone);
+
+                    legBones = [];
+                    [[-0.5, 0, -0.8], [0.5, 0, -0.8], [-0.5, 0, 0.8], [0.5, 0, 0.8]].forEach(([x, , z]) => {
+                        const leg = new THREE.Group();
+                        leg.position.set(x, 0, z);
+                        const upper = box(0.22, 0.65, 0.22, FACE, 0, 1, 0);
+                        const lower = box(0.18, 0.6, 0.18, FACE, 0, 0.3, 0);
+                        const hoof = box(0.22, 0.18, 0.26, 0x111111, 0, -0.05, 0);
+                        leg.add(upper, lower, hoof);
+                        g.add(leg);
+                        legBones.push(leg);
+                    });
+                },
+
+                // ── HORSE ──────────────────────────────────────────────
+                horse(g, c) {
+                    const BC = parseInt(c.replace('#', ''), 16);
+                    const MANE = 0x3a1a0a;
+                    const EYE = 0x111111;
+                    const HOOF = 0x2a2a2a;
+
+                    const body = box(2.0, 1.4, 3.5, BC, 0, 1.8, 0);
+                    g.add(body);
+
+                    const neck = box(0.65, 1.2, 0.65, BC, 0, 2.5, -1.7);
+                    neck.rotation.x = -0.5;
+                    g.add(neck);
+
+                    headBone = new THREE.Group();
+                    headBone.position.set(0, 3.3, -2.7);
+
+                    const head = box(0.7, 0.8, 1.5, BC, 0, 0, 0); headBone.add(head);
+                    const muzzle = box(0.55, 0.55, 0.7, BC, 0, -0.2, -0.9); headBone.add(muzzle);
+                    const n1 = box(0.1, 0.08, 0.08, 0x6a2020, -0.14, -0.22, -1.27);
+                    const n2 = box(0.1, 0.08, 0.08, 0x6a2020, 0.14, -0.22, -1.27);
+                    headBone.add(n1, n2);
+                    const e1 = box(0.13, 0.13, 0.08, EYE, -0.38, 0.2, -0.5); headBone.add(e1);
+                    const e2 = box(0.13, 0.13, 0.08, EYE, 0.38, 0.2, -0.5); headBone.add(e2);
+
+                    // Mane
+                    for (let i = 0; i < 5; i++) {
+                        const m = box(0.15, 0.35, 0.15, MANE, 0.05 - (i * 0.02), 0.55 - (i * 0.06), -0.4 + (i * 0.18));
+                        headBone.add(m);
+                    }
+
+                    // Ears
+                    const ea1 = box(0.14, 0.3, 0.1, BC, -0.28, 0.65, 0.2); ea1.rotation.z = -0.2; headBone.add(ea1);
+                    const ea2 = box(0.14, 0.3, 0.1, BC, 0.28, 0.65, 0.2); ea2.rotation.z = 0.2; headBone.add(ea2);
+
+                    g.add(headBone);
+
+                    // Tail
+                    for (let i = 0; i < 6; i++) {
+                        const t = box(0.1, 0.6, 0.08, MANE, -0.1 + (i * 0.04), 1.2 - (i * 0.05), 1.85 + (i * 0.12));
+                        t.rotation.x = 0.3 + i * 0.08;
+                        g.add(t);
+                    }
+
+                    legBones = [];
+                    [[-0.75, 0, -1.3], [0.75, 0, -1.3], [-0.75, 0, 1.1], [0.75, 0, 1.1]].forEach(([x, , z]) => {
+                        const leg = new THREE.Group();
+                        leg.position.set(x, 0, z);
+                        const upper = box(0.3, 0.9, 0.3, BC, 0, 1.3, 0);
+                        const lower = box(0.24, 0.9, 0.24, BC, 0, 0.4, 0);
+                        const hoof = box(0.3, 0.2, 0.36, HOOF, 0, -0.06, 0);
+                        leg.add(upper, lower, hoof);
+                        g.add(leg);
+                        legBones.push(leg);
+                    });
+                },
+
+                // ── CHICKEN ────────────────────────────────────────────
+                chicken(g, c) {
+                    const BC = parseInt(c.replace('#', ''), 16);
+                    const COMB = 0xcc2200;
+                    const BEAK = 0xe8b040;
+                    const EYE = 0x111111;
+
+                    // Body
+                    const body = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.9, 10, 10),
+                        new THREE.MeshLambertMaterial({ color: BC })
+                    );
+                    body.scale.set(1, 1.2, 1.3);
+                    body.position.set(0, 1.4, 0);
+                    body.castShadow = true;
+                    g.add(body);
+
+                    headBone = new THREE.Group();
+                    headBone.position.set(0, 2.35, -1.1);
+
+                    const head = sphere(0.48, BC, 0, 0, 0); headBone.add(head);
+
+                    // Comb
+                    for (let i = 0; i < 3; i++) {
+                        const comb = box(0.1, 0.22, 0.08, COMB, -0.1 + (i * 0.1), 0.5 - (i % 2) * 0.05, 0);
+                        headBone.add(comb);
+                    }
+
+                    // Wattle
+                    const wattle = box(0.12, 0.2, 0.08, COMB, 0, -0.32, -0.3); headBone.add(wattle);
+
+                    // Beak
+                    const beak = new THREE.Mesh(
+                        new THREE.ConeGeometry(0.1, 0.28, 4),
+                        new THREE.MeshLambertMaterial({ color: BEAK })
+                    );
+                    beak.rotation.x = -Math.PI / 2;
+                    beak.position.set(0, -0.05, -0.5);
+                    headBone.add(beak);
+
+                    const e1 = box(0.09, 0.09, 0.06, EYE, -0.25, 0.12, -0.4); headBone.add(e1);
+                    const e2 = box(0.09, 0.09, 0.06, EYE, 0.25, 0.12, -0.4); headBone.add(e2);
+
+                    g.add(headBone);
+
+                    // Wings
+                    const w1 = box(0.15, 0.6, 0.8, BC, -0.95, 1.6, 0); w1.rotation.z = 0.4; g.add(w1);
+                    const w2 = box(0.15, 0.6, 0.8, BC, 0.95, 1.6, 0); w2.rotation.z = -0.4; g.add(w2);
+
+                    // Tail feathers
+                    for (let i = 0; i < 4; i++) {
+                        const f = box(0.1, 0.5, 0.08, BC, -0.15 + (i * 0.1), 1.9 + i * 0.03, 0.95 + i * 0.08);
+                        f.rotation.x = -0.5; g.add(f);
+                    }
+
+                    legBones = [];
+                    [[-0.3, 0, 0], [0.3, 0, 0]].forEach(([x, , z]) => {
+                        const leg = new THREE.Group();
+                        leg.position.set(x, 0, z);
+                        const upper = cyl(0.1, 0.12, 0.6, 0xe8b040, 0, 0.8, 0);
+                        const lower = cyl(0.08, 0.1, 0.55, 0xe8b040, 0, 0.2, 0);
+                        leg.add(upper, lower);
+                        g.add(leg);
+                        legBones.push(leg);
+                    });
+                },
+
+                // ── GOAT ───────────────────────────────────────────────
+                goat(g, c) {
+                    const BC = parseInt(c.replace('#', ''), 16);
+                    const HORN = 0xc8a040;
+                    const EYE = 0x2a1a00;
+                    const HOOF = 0x2a2a2a;
+                    const BEARD = 0xc8b090;
+
+                    const body = box(1.6, 1.1, 2.8, BC, 0, 1.55, 0); g.add(body);
+                    const neck = box(0.55, 0.8, 0.55, BC, 0, 2.1, -1.3); neck.rotation.x = -0.4; g.add(neck);
+
+                    headBone = new THREE.Group();
+                    headBone.position.set(0, 2.75, -2.2);
+
+                    const head = box(0.75, 0.75, 1.0, BC, 0, 0, 0); headBone.add(head);
+                    const muzzle = box(0.5, 0.5, 0.4, BC, 0, -0.1, -0.65); headBone.add(muzzle);
+
+                    // Beard
+                    const beard = cyl(0.1, 0.15, 0.4, BEARD, 0, -0.5, -0.5); headBone.add(beard);
+
+                    // Horns (curved look with 2 segments)
+                    const hr1 = box(0.1, 0.45, 0.1, HORN, -0.3, 0.6, 0.1); hr1.rotation.z = -0.35; headBone.add(hr1);
+                    const hr2 = box(0.1, 0.45, 0.1, HORN, 0.3, 0.6, 0.1); hr2.rotation.z = 0.35; headBone.add(hr2);
+                    const hr1b = box(0.08, 0.3, 0.08, HORN, -0.55, 0.9, -0.08); hr1b.rotation.z = -0.1; headBone.add(hr1b);
+                    const hr2b = box(0.08, 0.3, 0.08, HORN, 0.55, 0.9, -0.08); hr2b.rotation.z = 0.1; headBone.add(hr2b);
+
+                    const e1 = box(0.11, 0.11, 0.07, EYE, -0.38, 0.1, -0.45); headBone.add(e1);
+                    const e2 = box(0.11, 0.11, 0.07, EYE, 0.38, 0.1, -0.45); headBone.add(e2);
+
+                    const ea1 = box(0.28, 0.15, 0.07, BC, -0.56, 0.15, 0); ea1.rotation.z = 0.5; headBone.add(ea1);
+                    const ea2 = box(0.28, 0.15, 0.07, BC, 0.56, 0.15, 0); ea2.rotation.z = -0.5; headBone.add(ea2);
+
+                    g.add(headBone);
+
+                    // Underbelly fluff
+                    const fluff = box(0.9, 0.25, 1.6, BEARD, 0, 0.92, 0); g.add(fluff);
+
+                    legBones = [];
+                    [[-0.55, 0, -1.0], [0.55, 0, -1.0], [-0.55, 0, 0.85], [0.55, 0, 0.85]].forEach(([x, , z]) => {
+                        const leg = new THREE.Group();
+                        leg.position.set(x, 0, z);
+                        const upper = box(0.24, 0.62, 0.24, BC, 0, 0.95, 0);
+                        const lower = box(0.2, 0.6, 0.2, BC, 0, 0.3, 0);
+                        const hoof = box(0.24, 0.18, 0.28, HOOF, 0, -0.05, 0);
+                        leg.add(upper, lower, hoof);
+                        g.add(leg);
+                        legBones.push(leg);
+                    });
+
+                    // Short tail
+                    const tail = box(0.12, 0.25, 0.12, BC, 0, 1.75, 1.4); tail.rotation.x = -0.5; g.add(tail);
+                },
+            };
+
+            // ── Build Animal ───────────────────────────────────────────
+            function buildAnimal(type) {
+                if (animalGroup) { scene.remove(animalGroup); }
+                animalGroup = new THREE.Group();
+                animalGroup.name = 'animal';
+                headBone = null;
+                legBones = [];
+
+                const builder = BUILDERS[type] || BUILDERS.cow;
+                builder(animalGroup, bodyColor);
+
+                scene.add(animalGroup);
+                updateStats();
+            }
+
+            // ── Env ────────────────────────────────────────────────────
+            function applyEnv(name) {
+                currentEnv = name;
+                const preset = ENVS[name];
+                scene.background = new THREE.Color(preset.bg);
+                scene.fog = new THREE.FogExp2(preset.fog, 0.022);
+                scene.getObjectByName('ambientLight') && (scene.getObjectByName('ambientLight').color.set(preset.ambient));
+                if (dirLight) { dirLight.color.set(preset.sun); dirLight.intensity = preset.intensity; }
+            }
+
+            // ── Stats ──────────────────────────────────────────────────
+            function updateStats() {
+                let geo = 0, tri = 0;
+                scene.traverse(o => { if (o.isMesh) { geo++; tri += o.geometry.index ? o.geometry.index.count / 3 : o.geometry.attributes.position.count / 3; } });
+                document.getElementById('stat-geo').textContent = geo;
+                document.getElementById('stat-tri').textContent = Math.round(tri).toLocaleString('tr-TR');
+            }
+
+            // ── Animate ────────────────────────────────────────────────
+            function animate() {
+                requestAnimationFrame(animate);
+                const delta = clock.getDelta();
+                animT += delta;
+
+                // FPS
+                fpsCounter++;
+                fpsClock += delta;
+                if (fpsClock >= 0.5) {
+                    lastFPS = Math.round(fpsCounter / fpsClock);
+                    document.getElementById('stat-fps').textContent = lastFPS;
+                    fpsCounter = 0; fpsClock = 0;
+                }
+
+                // Auto-rotate
+                if (animalGroup) {
+                    animalGroup.rotation.y += rotSpeed * delta;
+
+                    // Head idle bob
+                    if (headBone) {
+                        if (animMode === 'idle') {
+                            headBone.rotation.x = Math.sin(animT * 0.8) * 0.06;
+                            headBone.rotation.y = Math.sin(animT * 0.5) * 0.08;
+                        } else if (animMode === 'eat') {
+                            headBone.rotation.x = -0.45 + Math.sin(animT * 2.5) * 0.15;
+                        } else if (animMode === 'walk') {
+                            headBone.rotation.x = Math.sin(animT * 3) * 0.1;
+                        }
+                    }
+
+                    // Leg swing
+                    if (legBones.length >= 4) {
+                        const swing = animMode === 'walk' ? 0.45 : 0.04;
+                        const freq = animMode === 'walk' ? 4.5 : 1.0;
+                        legBones[0].rotation.x = Math.sin(animT * freq) * swing;
+                        legBones[1].rotation.x = -Math.sin(animT * freq) * swing;
+                        legBones[2].rotation.x = -Math.sin(animT * freq) * swing;
+                        legBones[3].rotation.x = Math.sin(animT * freq) * swing;
+                    }
+                }
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            // ── Resize ─────────────────────────────────────────────────
+            function onResize() {
+                const c = document.getElementById('canvas-container');
+                camera.aspect = c.clientWidth / c.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(c.clientWidth, c.clientHeight);
+            }
+
+            // ── Public API ─────────────────────────────────────────────
+            return {
+                changeAnimal(type, btn) {
+                    document.querySelectorAll('.animal-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    animalType = type;
+                    animMode = 'idle';
+                    buildAnimal(type);
+                },
+                setBodyColor(hex, el) {
+                    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+                    el.classList.add('active');
+                    bodyColor = hex;
+                    buildAnimal(animalType);
+                },
+                setSpeed(v) {
+                    rotSpeed = v / 1000;
+                    document.getElementById('speed-val').textContent = (v / 10).toFixed(1) + '×';
+                },
+                setGroundSize(v) {
+                    if (groundMesh) groundMesh.scale.setScalar(v / 15);
+                    document.getElementById('ground-val').textContent = (v / 15).toFixed(1) + '×';
+                },
+                setLight(v) {
+                    if (dirLight) dirLight.intensity = v / 15;
+                    document.getElementById('light-val').textContent = (v / 15).toFixed(1) + '×';
+                },
+                setEnv(name, btn) {
+                    document.querySelectorAll('.env-btn').forEach(b => { if (b.textContent.includes('üz') || b.textContent.includes('ksam') || b.textContent.includes('ece')) b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    applyEnv(name);
+                },
+                toggleGrass(btn) {
+                    grassEnabled = !grassEnabled;
+                    grassMeshes.forEach(m => m.visible = grassEnabled);
+                    btn.classList.toggle('active', grassEnabled);
+                },
+                toggleShadow(btn) {
+                    shadowEnabled = !shadowEnabled;
+                    renderer.shadowMap.enabled = shadowEnabled;
+                    scene.traverse(o => { if (o.isMesh) { o.castShadow = shadowEnabled; o.receiveShadow = shadowEnabled; } });
+                    btn.classList.toggle('active', shadowEnabled);
+                },
+                playAnim(mode) { animMode = mode; },
+                resetCamera() {
+                    camera.position.set(0, 4, 9);
+                    controls.target.set(0, 1.5, 0);
+                    controls.update();
+                },
+                init,
+            };
+        })();
+
+        // Start when Three.js is ready
+        window.addEventListener('load', () => {
+            if (typeof THREE !== 'undefined') App.init();
+            else {
+                const check = setInterval(() => { if (typeof THREE !== 'undefined') { clearInterval(check); App.init(); } }, 100);
+            }
+        });
+    </script>
+
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

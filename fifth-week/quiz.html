@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q-Line HR Assessment | Quiz App</title>
+    <!-- Importing same fonts as main site for consistency -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="quiz-body">
+
+    <div class="app-container">
+
+        <div id="start-screen" class="screen active">
+            <h1>Q-Line IK Aday Değerlendirme</h1>
+            <p>Toplam 4 soru ile teknik bilginizi ölçüyoruz. Başarılar dileriz.</p>
+            <button id="start-btn" class="btn btn-primary">Sınavı Başlat</button>
+        </div>
+
+        <div id="quiz-screen" class="screen hidden">
+            <div class="header">
+                <span id="question-number" class="badge">Soru 1/4</span>
+                <span id="score-board" class="badge secondary">Puan: 0</span>
+            </div>
+
+            <h2 id="question-text">Soru metni yükleniyor...</h2>
+
+            <div id="options-container">
+                <!-- Options will be injected here via JS -->
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen hidden">
+            <div class="result-icon">🏆</div>
+            <h2>Değerlendirme Tamamlandı!</h2>
+            <p>Toplam Başarı Puanınız:</p>
+            <h1 id="final-score">0</h1>
+            <p id="feedback-text">Sonuç değerlendiriliyor...</p>
+            <div class="action-buttons">
+                <button onclick="location.reload()" class="btn btn-outline">Tekrar Dene</button>
+                <a href="index.html" class="btn btn-primary">Ana Sayfaya Dön</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script specifically for the quiz logic -->
+    <script src="quiz.js"></script>
+</body>
+
+</html>

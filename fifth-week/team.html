@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ekibimiz | Q-Farm</title>
+  <meta name="description"
+    content="Q-Farm'ın uzman ekibi ile tanışın. Tarım teknolojisi alanında deneyimli kadromuz." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav>
+      <a href="index.html" class="logo">Q-<span>Farm</span></a>
+
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Menüyü aç">
+        <span></span><span></span><span></span>
+      </label>
+
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="index.html">Anasayfa</a></li>
+          <li><a href="index.html#services">Hizmetler</a></li>
+          <li><a href="team.html" class="active">Ekibimiz</a></li>
+          <li><a href="weather.html">Hava Durumu 🌤️</a></li>
+          <li><a href="farm3d.html">3D Çiftlik 🐄</a></li>
+        </ul>
+        <label class="bb8-toggle" title="Temayı değiştir" aria-label="Tema değiştir">
+          <input class="bb8-toggle__checkbox" type="checkbox" id="theme-toggle" onchange="toggleTheme(this.checked)">
+          <div class="bb8-toggle__container">
+            <div class="bb8-toggle__scenery">
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="tatto-1"></div>
+              <div class="tatto-2"></div>
+              <div class="gomrassen"></div>
+              <div class="hermes"></div>
+              <div class="chenini"></div>
+              <div class="bb8-toggle__cloud"></div>
+              <div class="bb8-toggle__cloud"></div>
+              <div class="bb8-toggle__cloud"></div>
+            </div>
+            <div class="bb8">
+              <div class="bb8__head-container">
+                <div class="bb8__antenna"></div>
+                <div class="bb8__antenna"></div>
+                <div class="bb8__head"></div>
+              </div>
+              <div class="bb8__body"></div>
+            </div>
+            <div class="artificial__hidden">
+              <div class="bb8__shadow"></div>
+            </div>
+          </div>
+        </label>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Corporate Vision -->
+  <section class="vision-section">
+    <div class="container">
+      <h2 class="section-title">Vizyonumuz</h2>
+      <p class="vision-text">
+        Q-Line Solutions olarak, teknolojinin gücünü doğanın bereketiyle birleştiriyoruz.
+        Amacımız, sürdürülebilir ve verimli tarım teknolojileri ile geleceği bugünden inşa etmek.
+        Her bir kod satırında, daha yeşil ve daha akıllı bir dünya hayali yatıyor.
+      </p>
+    </div>
+  </section>
+
+  <!-- Meet the Team -->
+  <section class="team-section">
+    <h2 class="section-title">Uzman Kadromuz</h2>
+    <p class="section-subtitle">Hover yaparak daha fazla bilgi edinin</p>
+    <div class="team-grid">
+      <!-- Member 1: General Manager -->
+      <div class="team-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <img
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Genel Müdür Ahmet Yılmaz" />
+            <h3>Ahmet Yılmaz</h3>
+            <p class="role">Genel Müdür</p>
+          </div>
+          <div class="card-back">
+            <h3>Ahmet Yılmaz</h3>
+            <p class="role">Genel Müdür</p>
+            <div class="skills">
+              <p>15+ Yıl Deneyim</p>
+              <p>Stratejik Planlama</p>
+              <p>Global Liderlik</p>
+            </div>
+            <div class="social-links">
+              <a href="#">LinkedIn</a>
+              <a href="#">Email</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member 2: Lead Developer -->
+      <div class="team-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Lead Developer" />
+            <h3>Siz (Aday Geliştirici)</h3>
+            <p class="role">Lead Developer</p>
+          </div>
+          <div class="card-back">
+            <h3>Siz</h3>
+            <p class="role">Lead Developer</p>
+            <div class="skills">
+              <p>Full Stack Wizard</p>
+              <p>CSS Flexbox Master</p>
+              <p>Problem Solver</p>
+              <p>API Entegrasyonu</p>
+            </div>
+            <p class="certification">★ Q-Line Certified</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member 3: Creative Director -->
+      <div class="team-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <img
+              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Kreatif Direktör Zeynep Kaya" />
+            <h3>Zeynep Kaya</h3>
+            <p class="role">Kreatif Direktör</p>
+          </div>
+          <div class="card-back">
+            <h3>Zeynep Kaya</h3>
+            <p class="role">Kreatif Direktör</p>
+            <div class="skills">
+              <p>UI/UX Design</p>
+              <p>Brand Strategy</p>
+              <p>Visual Storytelling</p>
+            </div>
+            <div class="social-links">
+              <a href="#">Behance</a>
+              <a href="#">Email</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="back-link-container">
+      <a href="index.html" class="btn">← Anasayfaya Dön</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+      <span>© 2026 Q-Farm Teknoloji A.Ş.</span>
+      <span><a href="index.html">Anasayfa</a> · <a href="weather.html">Hava Durumu 🌤️</a></span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+
+</html>
