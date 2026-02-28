@@ -1,0 +1,125 @@
+﻿{
+    "value":  [
+                  {
+                      "id":  1,
+                      "tip":  "ihtiyac",
+                      "acil":  true,
+                      "detay":  "3 aile için acil bebek maması (1-3 yaş) ve paketli içme suyu gerekmektedir.",
+                      "konum":  "Düzce Merkez - Çadırkent",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "Bebek Maması ve Temiz Su",
+                      "kategori":  "gida"
+                  },
+                  {
+                      "id":  2,
+                      "tip":  "destek",
+                      "acil":  false,
+                      "detay":  "Evimizin boş odasını barınma sorunu yaşayan 2 öğrenciye açabiliriz. İnternet ve ısınma mevcuttur.",
+                      "konum":  "Sakarya / Serdivan",
+                      "tarih":  "2026-02-22",
+                      "baslik":  "Öğrenci Evinde Boş Oda",
+                      "kategori":  "barinma"
+                  },
+                  {
+                      "id":  3,
+                      "tip":  "ihtiyac",
+                      "acil":  true,
+                      "detay":  "Diyabet hastası yaşlı bir teyzemiz için insülin kalemi ve ilacın bozulmaması için soğutucu çanta lazım.",
+                      "konum":  "Hatay / Antakya",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "İnsülin ve Soğutucu Çanta",
+                      "kategori":  "saglik"
+                  },
+                  {
+                      "id":  4,
+                      "tip":  "ihtiyac",
+                      "acil":  true,
+                      "detay":  "Sokakta yaralı halde bulunan kedi için kliniğe nakil aracı ve tedavi sonrası 1 haftalık geçici yuva aranıyor.",
+                      "konum":  "İzmir / Bayraklı",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "Geçici Yuva veya Klinik Aracı",
+                      "kategori":  "hayvanlar"
+                  },
+                  {
+                      "id":  5,
+                      "tip":  "destek",
+                      "acil":  false,
+                      "detay":  "Sınava hazırlanan ancak kursa gidemeyen 5 öğrenciye hafta sonları ücretsiz matematik dersi verebilirim.",
+                      "konum":  "Online / Zoom",
+                      "tarih":  "2026-02-21",
+                      "baslik":  "Ücretsiz YKS Matematik Dersi",
+                      "kategori":  "egitim"
+                  },
+                  {
+                      "id":  6,
+                      "tip":  "ihtiyac",
+                      "acil":  false,
+                      "detay":  "Yazılım öğrenmeye çalışan bir gencimiz için düşük özellikli de olsa çalışan bir dizüstü bilgisayar aranıyor.",
+                      "konum":  "Ankara / Polatlı",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "İkinci El Laptop İhtiyacı",
+                      "kategori":  "esya"
+                  },
+                  {
+                      "id":  7,
+                      "tip":  "destek",
+                      "acil":  true,
+                      "detay":  "Afet sonrası travma yaşayan çocuklar ve yetişkinler için ücretsiz online veya yüz yüze seans verebilirim.",
+                      "konum":  "Düzce / Gölyaka",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "Gönüllü Psikolog Desteği",
+                      "kategori":  "psikoloji"
+                  },
+                  {
+                      "id":  8,
+                      "tip":  "ihtiyac",
+                      "acil":  true,
+                      "detay":  "Arama kurtarma ekiplerinin telefonlarını şarj edebilmesi için yüksek kapasiteli powerbank ihtiyacı vardır.",
+                      "konum":  "Kahramanmaraş / Elbistan",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "Powerbank ve Şarj İstasyonu",
+                      "kategori":  "lojistik"
+                  },
+                  {
+                      "id":  9,
+                      "tip":  "destek",
+                      "acil":  false,
+                      "detay":  "Her akşam saat 18:00 - 21:00 arası Nilüfer meydanında ücretsiz sıcak çorba ve ekmek dağıtımı yapıyoruz.",
+                      "konum":  "Bursa / Nilüfer",
+                      "tarih":  "2026-02-22",
+                      "baslik":  "Sıcak Çorba Dağıtımı",
+                      "kategori":  "gida"
+                  },
+                  {
+                      "id":  10,
+                      "tip":  "ihtiyac",
+                      "acil":  true,
+                      "detay":  "Kocaeli Üniversitesi Hastanesi\u0027nde yatmakta olan bir hasta için acil 0 Rh Negatif kan ihtiyacı vardır.",
+                      "konum":  "Kocaeli / İzmit",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "0 Rh- Kan Bağışı Acil",
+                      "kategori":  "saglik"
+                  },
+                  {
+                      "id":  11,
+                      "tip":  "destek",
+                      "acil":  false,
+                      "detay":  "Çadırkentteki çocuklar için oyun etkinlikleri düzenliyoruz, gönüllü palyaço veya hikaye anlatıcısı aranıyor.",
+                      "konum":  "Gaziantep / Nurdağı",
+                      "tarih":  "2026-02-22",
+                      "baslik":  "Gezici Oyun Parkı ve Oyuncak",
+                      "kategori":  "cocuk"
+                  },
+                  {
+                      "id":  12,
+                      "tip":  "ihtiyac",
+                      "acil":  false,
+                      "detay":  "Marangozluktan anlayan, barınma sorunu çözülmüş bir depremzede vatandaşımıza atölyemizde iş verebiliriz.",
+                      "konum":  "Düzce / Gümüşova",
+                      "tarih":  "2026-02-23",
+                      "baslik":  "Depremzede İçin İş İmkanı",
+                      "kategori":  "is"
+                  }
+              ],
+    "Count":  12
+}

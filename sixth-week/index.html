@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q-Farm | Modern Hayvancılık Çözümleri</title>
+  <meta name="description"
+    content="Q-Farm ile hayvancılıkta verimliliği artırın. Akıllı ahır sistemleri ve otomatik sağım teknolojileri." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════
+         NAVBAR
+    ═══════════════════════════════════════ -->
+  <header>
+    <nav>
+      <div class="logo">Q-<span>Farm</span></div>
+
+      <!-- CSS Hamburger -->
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Menüyü aç">
+        <span></span><span></span><span></span>
+      </label>
+
+      <!-- Nav Right: links + theme toggle -->
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="#" class="active">Anasayfa</a></li>
+          <li><a href="#services">Hizmetler</a></li>
+          <li><a href="#calculator">Hesaplama</a></li>
+          <li><a href="team.html">Ekibimiz</a></li>
+          <li><a href="weather.html">Hava Durumu 🌤️</a></li>
+          <li><a href="farm3d.html">3D Çiftlik 🐄</a></li>
+          <li><a href="hackathon/index.html" style="color: var(--danger-color, #ef4444); font-weight: bold;">Afet Destek
+              🆘</a></li>
+        </ul>
+
+        <!-- Task 5.2: BB8 Dark/Light Mode Toggle -->
+        <label class="bb8-toggle" title="Temayı değiştir" aria-label="Tema değiştir">
+          <input class="bb8-toggle__checkbox" type="checkbox" id="theme-toggle" onchange="toggleTheme(this.checked)">
+          <div class="bb8-toggle__container">
+            <div class="bb8-toggle__scenery">
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="bb8-toggle__star"></div>
+              <div class="tatto-1"></div>
+              <div class="tatto-2"></div>
+              <div class="gomrassen"></div>
+              <div class="hermes"></div>
+              <div class="chenini"></div>
+              <div class="bb8-toggle__cloud"></div>
+              <div class="bb8-toggle__cloud"></div>
+              <div class="bb8-toggle__cloud"></div>
+            </div>
+            <div class="bb8">
+              <div class="bb8__head-container">
+                <div class="bb8__antenna"></div>
+                <div class="bb8__antenna"></div>
+                <div class="bb8__head"></div>
+              </div>
+              <div class="bb8__body"></div>
+            </div>
+            <div class="artificial__hidden">
+              <div class="bb8__shadow"></div>
+            </div>
+          </div>
+        </label>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Türkiye'nin #1 Akıllı Çiftlik Platformu
+      </div>
+      <h1>
+        Geleceğin Çiftliği,<br>
+        <span class="highlight">Bugünden Başlar</span>
+      </h1>
+      <p>
+        Q-Farm ile hayvancılıkta verimliliği %40 artırın. Akıllı ahır sistemleri,
+        otomatik sağım ve gerçek zamanlı sürü takibi ile tanışın.
+      </p>
+      <div class="hero-actions">
+        <a href="#services" class="btn">Hizmetleri Keşfet →</a>
+        <a href="#calculator" class="btn btn-outline">Maliyet Hesapla</a>
+      </div>
+      <div class="hero-trust">
+        <div class="avatars">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Müşteri 1" />
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Müşteri 2" />
+          <img src="https://randomuser.me/api/portraits/men/58.jpg" alt="Müşteri 3" />
+        </div>
+        <div class="trust-text">
+          <strong>500+ mutlu çiftçi</strong>
+          ⭐⭐⭐⭐⭐ ortalama puan
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-img">
+      <img
+        src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        alt="Modern Çiftlik - Q-Farm teknolojisi" loading="lazy" />
+      <!-- Floating cards -->
+      <div class="hero-float-card card-a">
+        <span class="fc-icon">📈</span>
+        <div>
+          <div class="fc-label">Verimlilik Artışı</div>
+          <div class="fc-value">+40%</div>
+        </div>
+      </div>
+      <div class="hero-float-card card-b">
+        <span class="fc-icon">🐄</span>
+        <div>
+          <div class="fc-label">Takip Edilen Hayvan</div>
+          <div class="fc-value">12.500+</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+         STATS
+    ═══════════════════════════════════════ -->
+  <section class="stats-section reveal">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number" data-target="500">0</div>
+        <div class="stat-label">Aktif Çiftlik</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="12500">0</div>
+        <div class="stat-label">İzlenen Hayvan</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="40">0</div>
+        <div class="stat-label">% Verimlilik Artışı</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="8">0</div>
+        <div class="stat-label">Yıllık Deneyim</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+         HİZMETLER
+    ═══════════════════════════════════════ -->
+  <section class="services reveal" id="services">
+    <h2 class="section-title">Hizmetlerimiz</h2>
+    <p class="section-subtitle">Çiftliğinizi geleceğe taşıyacak akıllı teknolojiler</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🥛</div>
+        <h3>Otomatik Sağım</h3>
+        <p>El değmeden hijyenik süt sağım sistemleri. Günlük veriler ile süt kalitesini anlık izleyin.</p>
+        <a href="#" class="service-link">Detayları Gör →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌾</div>
+        <h3>Akıllı Yemleme</h3>
+        <p>Hayvanlarınız için optimize edilmiş yem dağıtımı. Bireysel ihtiyaçlara göre kişiselleştirilmiş beslenme.</p>
+        <a href="#" class="service-link">Detayları Gör →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Sürü Takip</h3>
+        <p>Dijital küpeler ile 7/24 sağlık izleme. Anormal davranışlar için anlık uyarı sistemi.</p>
+        <a href="#" class="service-link">Detayları Gör →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌡️</div>
+        <h3>İklim Kontrolü</h3>
+        <p>Ahır içi sıcaklık, nem ve hava kalitesini otomatik olarak kontrol eden akıllı sistemler.</p>
+        <a href="#" class="service-link">Detayları Gör →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔬</div>
+        <h3>Sağlık Analizi</h3>
+        <p>Yapay zeka destekli hastalık tespiti. Veteriner müdahalesinden önce erken uyarı alın.</p>
+        <a href="#" class="service-link">Detayları Gör →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Mobil Yönetim</h3>
+        <p>Çiftliğinizi cebinizden yönetin. iOS ve Android uyumlu kapsamlı mobil uygulama.</p>
+        <a href="#" class="service-link">Detayları Gör →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+         MALİYET HESAPLAMA (Task 4.1)
+    ═══════════════════════════════════════ -->
+  <section class="calculator-section reveal" id="calculator">
+    <h2 class="section-title">Maliyet Hesaplama Aracı</h2>
+    <p class="section-subtitle">Size özel hızlı tahmini fiyat alın</p>
+    <div class="calculator-container">
+      <div class="calc-form">
+        <div class="form-group">
+          <label for="animal-count">🐄 Büyükbaş Hayvan Sayısı</label>
+          <input type="number" id="animal-count" min="0" placeholder="Örn: 50" oninput="calculateTotal()" />
+        </div>
+
+        <div class="form-group">
+          <label>⚙️ Ek Hizmetler</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="service-milking" value="25000" onchange="calculateTotal()" />
+              🥛 Otomatik Sağım Sistemi <strong>(+25.000 ₺)</strong>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="service-feeding" value="15000" onchange="calculateTotal()" />
+              🌾 Akıllı Yemleme Sistemi <strong>(+15.000 ₺)</strong>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="service-tracking" value="500" onchange="calculateTotal()" />
+              📊 Sürü Takip Sistemi <strong>(Hayvan Başı +500 ₺)</strong>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-result">
+        <h3>Tahmini Yatırım Maliyeti</h3>
+        <div id="total-price" class="price-display">0 ₺</div>
+        <p class="note">*Fiyatlar tahmini olup, detaylı teklif için iletişime geçiniz.</p>
+        <button class="btn-calc" onclick="calculateTotal()">🚀 Hemen Teklif Al</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+         TESTİMONİALS (Referanslar)
+    ═══════════════════════════════════════ -->
+  <section class="testimonials-section reveal">
+    <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
+    <p class="section-subtitle">Gerçek çiftçilerden gerçek deneyimler</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">
+          Q-Farm'ı kullanmaya başladıktan sonra sütçü ineklerimizin günlük süt üretimi
+          %35 arttı. Sağım makinesi gerçekten hayat kurtarıcı!
+        </p>
+        <div class="testimonial-author">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mustafa Kaya" class="author-avatar" />
+          <div>
+            <div class="author-name">Mustafa Kaya</div>
+            <div class="author-role">Konya, 120 Baş İşletme</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">
+          Akıllı yemleme sistemi sayesinde yem israfı tamamen bitti.
+          Aylık 8.000 TL tasarruf ediyorum. Yatırımımı 6 ayda geri aldım.
+        </p>
+        <div class="testimonial-author">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Ayşe Demir" class="author-avatar" />
+          <div>
+            <div class="author-name">Ayşe Demir</div>
+            <div class="author-role">Erzurum, 85 Baş İşletme</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">
+          7/24 sürü takip sistemi sayesinde bir inekde mastiti sisteme girmeden
+          48 saat önce tespit ettik. Veteriner masrafından kurtulduk!
+        </p>
+        <div class="testimonial-author">
+          <img src="https://randomuser.me/api/portraits/men/58.jpg" alt="Hasan Çelik" class="author-avatar" />
+          <div>
+            <div class="author-name">Hasan Çelik</div>
+            <div class="author-role">Bursa, 200 Baş İşletme</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Q-<span>Farm</span></div>
+        <p>
+          Hayvancılıkta teknolojiyi doğanın bereketiyle buluşturuyoruz.
+          Sürdürülebilir ve verimli tarım geleceği için buradayız.
+        </p>
+      </div>
+      <div>
+        <div class="footer-heading">Sayfalar</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Anasayfa</a></li>
+          <li><a href="team.html">Ekibimiz</a></li>
+          <li><a href="weather.html">🌤️ Hava Durumu</a></li>
+          <li><a href="task2.html">Paket Fiyatları</a></li>
+          <li><a href="quiz.html">IK Değerlendirme</a></li>
+          <li><a href="hackathon/index.html" style="color: var(--danger-color, #ef4444); font-weight: bold;">Afet Destek
+              🆘</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">İletişim</div>
+        <ul class="footer-links">
+          <li><a href="mailto:info@qfarm.com.tr">📧 info@qfarm.com.tr</a></li>
+          <li><a href="tel:+902121234567">📞 0212 123 45 67</a></li>
+          <li><a href="#">📍 İstanbul, Türkiye</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Q-Farm Teknoloji A.Ş. — Tüm Hakları Saklıdır.</span>
+      <span>Yapıldı: <a href="team.html">Q-Line Solutions</a> 🚀</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+
+</html>

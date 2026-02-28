@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hava Durumu | Q-Farm</title>
+    <meta name="description"
+        content="Anlık hava durumu, 7 günlük tahmin. Çiftçiler için geliştirilmiş hava durumu uygulaması." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="weather-body">
+
+    <!-- ═══ HEADER ═══ -->
+    <div
+        style="background: var(--header-bg); backdrop-filter: var(--header-blur); -webkit-backdrop-filter: var(--header-blur); position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 20px rgba(0,0,0,0.15);">
+        <nav
+            style="display:flex; justify-content:space-between; align-items:center; max-width:1100px; margin:0 auto; padding:1rem 1.5rem;">
+            <a href="index.html" class="logo" style="text-decoration:none;">Q-<span>Farm</span></a>
+            <div style="display:flex; align-items:center; gap:1.5rem;">
+                <a href="index.html"
+                    style="color:rgba(255,255,255,0.8); font-weight:500; font-size:0.9rem; text-decoration:none; transition:color 0.3s;"
+                    onmouseover="this.style.color='#f6ad3a'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">←
+                    Anasayfa</a>
+                <a href="hackathon/index.html"
+                    style="color:#ef4444; font-weight:bold; font-size:0.9rem; text-decoration:none; transition:color 0.3s;"
+                    onmouseover="this.style.color='#f87171'" onmouseout="this.style.color='#ef4444'">
+                    Afet Destek 🆘</a>
+                <label class="bb8-toggle" title="Temayı değiştir" aria-label="Tema değiştir">
+                    <input class="bb8-toggle__checkbox" type="checkbox" id="theme-toggle"
+                        onchange="toggleTheme(this.checked)">
+                    <div class="bb8-toggle__container">
+                        <div class="bb8-toggle__scenery">
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="bb8-toggle__star"></div>
+                            <div class="tatto-1"></div>
+                            <div class="tatto-2"></div>
+                            <div class="gomrassen"></div>
+                            <div class="hermes"></div>
+                            <div class="chenini"></div>
+                            <div class="bb8-toggle__cloud"></div>
+                            <div class="bb8-toggle__cloud"></div>
+                            <div class="bb8-toggle__cloud"></div>
+                        </div>
+                        <div class="bb8">
+                            <div class="bb8__head-container">
+                                <div class="bb8__antenna"></div>
+                                <div class="bb8__antenna"></div>
+                                <div class="bb8__head"></div>
+                            </div>
+                            <div class="bb8__body"></div>
+                        </div>
+                        <div class="artificial__hidden">
+                            <div class="bb8__shadow"></div>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <div class="weather-main">
+
+        <!-- Page Title -->
+        <div style="text-align:center; margin-bottom: 2.5rem;">
+            <h1 class="section-title" style="margin-bottom:0.4rem;">🌤️ Hava Durumu</h1>
+            <p class="section-subtitle" style="margin-bottom:0;">Çiftliğiniz için güncel hava bilgisi</p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <input type="text" class="search-input" id="city-input"
+                placeholder="Şehir adı giriniz... (örn: İstanbul, Konya)" autocomplete="off"
+                onkeydown="if(event.key==='Enter') searchWeather()" />
+            <button class="search-btn" onclick="searchWeather()">🔍 Ara</button>
+        </div>
+
+        <!-- Results Area -->
+        <div id="weather-results">
+            <!-- Empty State -->
+            <div class="weather-empty" id="empty-state">
+                <div class="weather-empty-icon">🌍</div>
+                <h3 style="color:var(--text); margin-bottom:0.5rem;">Şehir Arayın</h3>
+                <p>Hava durumu bilgisi görmek için yukarıdan bir şehir arayın.<br>
+                    <span style="font-size:0.85rem; opacity:0.7;">API: Open-Meteo (ücretsiz, kayıt gerektirmez)</span>
+                </p>
+            </div>
+        </div>
+
+    </div><!-- /weather-main -->
+
+    <!-- Footer -->
+    <footer
+        style="text-align:center; background: var(--primary); color: rgba(255,255,255,0.6); padding: 1.5rem; font-size: 0.85rem;">
+        <p>© 2026 Q-Farm · Veriler: <a href="https://open-meteo.com/" target="_blank" rel="noopener"
+                style="color:var(--accent);">Open-Meteo API</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // ================================================================
+        // TASK 5.3: WEATHER MICROAPP
+        // Uses Open-Meteo (free, no API key) + Open-Meteo Geocoding API
+        // ================================================================
+
+        // WMO Weather Code → Turkish description + emoji
+        const WMO_CODES = {
+            0: { label: 'Açık', icon: '☀️' },
+            1: { label: 'Çoğunlukla Açık', icon: '🌤️' },
+            2: { label: 'Parçalı Bulutlu', icon: '⛅' },
+            3: { label: 'Bulutlu', icon: '☁️' },
+            45: { label: 'Sisli', icon: '🌫️' },
+            48: { label: 'Dondurucu Sis', icon: '🌫️' },
+            51: { label: 'Hafif Çiseleme', icon: '🌦️' },
+            53: { label: 'Çiseleme', icon: '🌦️' },
+            55: { label: 'Yoğun Çiseleme', icon: '🌦️' },
+            61: { label: 'Hafif Yağmur', icon: '🌧️' },
+            63: { label: 'Yağmur', icon: '🌧️' },
+            65: { label: 'Yoğun Yağmur', icon: '🌧️' },
+            71: { label: 'Hafif Kar', icon: '🌨️' },
+            73: { label: 'Kar', icon: '❄️' },
+            75: { label: 'Yoğun Kar', icon: '❄️' },
+            77: { label: 'Kar Tanesi', icon: '🌨️' },
+            80: { label: 'Hafif Sağanak', icon: '🌦️' },
+            81: { label: 'Sağanak', icon: '🌧️' },
+            82: { label: 'Yoğun Sağanak', icon: '⛈️' },
+            85: { label: 'Kar Sağanağı', icon: '🌨️' },
+            86: { label: 'Yoğun Kar Sağ.', icon: '🌨️' },
+            95: { label: 'Fırtına', icon: '⛈️' },
+            96: { label: 'Fırt. + Dolu', icon: '⛈️' },
+            99: { label: 'Şiddetli Fırtına', icon: '⛈️' },
+        };
+
+        function getWMO(code) {
+            return WMO_CODES[code] || { label: 'Bilinmiyor', icon: '🌡️' };
+        }
+
+        function shortDay(dateStr) {
+            const days = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+            return days[new Date(dateStr).getDay()];
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr + 'T12:00:00');
+            return d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function showLoading() {
+            document.getElementById('weather-results').innerHTML = `
+        <div class="weather-loading">
+          <div class="spinner"></div>
+          <p>Hava durumu verileri alınıyor...</p>
+        </div>`;
+        }
+
+        function showError(msg) {
+            document.getElementById('weather-results').innerHTML = `
+        <div class="weather-error">
+          <div style="font-size:3rem; margin-bottom:1rem;">⚠️</div>
+          <h3 style="color:var(--text);">${msg}</h3>
+          <p>Şehir adını doğru yazdığınızdan emin olun.</p>
+        </div>`;
+        }
+
+        async function searchWeather() {
+            const city = document.getElementById('city-input').value.trim();
+            if (!city) return;
+
+            showLoading();
+
+            try {
+                // Step 1: Geocoding API → lat/lon
+                const geoRes = await fetch(
+                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=tr&format=json`
+                );
+                const geoData = await geoRes.json();
+
+                if (!geoData.results || geoData.results.length === 0) {
+                    showError(`"${city}" şehri bulunamadı.`);
+                    return;
+                }
+
+                const { latitude, longitude, name, country, admin1 } = geoData.results[0];
+                const locationLabel = [name, admin1, country].filter(Boolean).join(', ');
+
+                // Step 2: Weather API → current + 7-day forecast
+                const weatherRes = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?` +
+                    `latitude=${latitude}&longitude=${longitude}` +
+                    `&current=temperature_2m,apparent_temperature,relative_humidity_2m,` +
+                    `wind_speed_10m,wind_direction_10m,precipitation,weather_code,uv_index,visibility` +
+                    `&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_sum,sunrise,sunset` +
+                    `&wind_speed_unit=kmh&timezone=auto&forecast_days=7`
+                );
+                const wData = await weatherRes.json();
+
+                renderWeather(locationLabel, wData);
+
+            } catch (err) {
+                showError('Bağlantı hatası. İnternet bağlantınızı kontrol edin.');
+                console.error(err);
+            }
+        }
+
+        function windDir(deg) {
+            const dirs = ['K', 'KKD', 'KD', 'DKD', 'D', 'DGD', 'GD', 'GGD', 'G', 'GGB', 'GB', 'BGB', 'B', 'KBB', 'KB', 'KKB'];
+            return dirs[Math.round(deg / 22.5) % 16];
+        }
+
+        function renderWeather(location, data) {
+            const c = data.current;
+            const d = data.daily;
+            const wmo = getWMO(c.weather_code);
+            const today = new Date().toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            // 7-day forecast cards
+            const forecastCards = d.time.map((date, i) => {
+                const dWmo = getWMO(d.weather_code[i]);
+                return `
+          <div class="forecast-card">
+            <div class="fc-day">${i === 0 ? 'Bugün' : shortDay(date)}</div>
+            <div class="fc-icon-w">${dWmo.icon}</div>
+            <div class="fc-max">${Math.round(d.temperature_2m_max[i])}°</div>
+            <div class="fc-min">${Math.round(d.temperature_2m_min[i])}°</div>
+          </div>`;
+            }).join('');
+
+            // Sunrise/sunset for today
+            const sunrise = d.sunrise[0] ? d.sunrise[0].slice(11, 16) : '--:--';
+            const sunset = d.sunset[0] ? d.sunset[0].slice(11, 16) : '--:--';
+
+            const html = `
+        <!-- Current Weather Card -->
+        <div class="current-weather">
+          <div class="weather-top">
+            <div>
+              <div class="weather-city">📍 ${location}</div>
+              <div class="weather-date">${today}</div>
+            </div>
+            <div class="weather-icon-main">${wmo.icon}</div>
+          </div>
+          <div class="weather-bottom">
+            <div>
+              <div class="temp-big">${Math.round(c.temperature_2m)}°C</div>
+              <div class="weather-desc">${wmo.label}</div>
+              <div style="font-size:0.9rem; opacity:0.75; margin-top:0.3rem;">Hissedilen: ${Math.round(c.apparent_temperature)}°C</div>
+            </div>
+            <div class="weather-details-grid">
+              <div class="detail-item"><span class="di-icon">💧</span> Nem: %${c.relative_humidity_2m}</div>
+              <div class="detail-item"><span class="di-icon">💨</span> Rüzgar: ${Math.round(c.wind_speed_10m)} km/h ${windDir(c.wind_direction_10m)}</div>
+              <div class="detail-item"><span class="di-icon">🌧️</span> Yağış: ${c.precipitation} mm</div>
+              <div class="detail-item"><span class="di-icon">☀️</span> UV: ${c.uv_index ?? 'N/A'}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7-Day Forecast -->
+        <p class="forecast-title">📅 7 Günlük Tahmin</p>
+        <div class="forecast-grid">
+          ${forecastCards}
+        </div>
+
+        <!-- Extra Info -->
+        <div class="extra-cards">
+          <div class="extra-card">
+            <div class="ec-icon">🌅</div>
+            <div class="ec-label">Gün Doğumu</div>
+            <div class="ec-value">${sunrise}</div>
+          </div>
+          <div class="extra-card">
+            <div class="ec-icon">🌇</div>
+            <div class="ec-label">Gün Batımı</div>
+            <div class="ec-value">${sunset}</div>
+          </div>
+          <div class="extra-card">
+            <div class="ec-icon">👁️</div>
+            <div class="ec-label">Görüş Mesafesi</div>
+            <div class="ec-value">${c.visibility != null ? (c.visibility / 1000).toFixed(1) + ' km' : 'N/A'}</div>
+          </div>
+          <div class="extra-card">
+            <div class="ec-icon">🌡️</div>
+            <div class="ec-label">Max/Min Bugün</div>
+            <div class="ec-value">${Math.round(d.temperature_2m_max[0])}° / ${Math.round(d.temperature_2m_min[0])}°</div>
+          </div>
+        </div>
+      `;
+
+            document.getElementById('weather-results').innerHTML = html;
+        }
+
+        // Auto-search İstanbul on first load for a nice default experience
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('city-input').value = 'İstanbul';
+            searchWeather();
+        });
+    </script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>
